@@ -1,0 +1,74 @@
+---
+import { footer, links, person } from '../content/site';
+const year = new Date().getFullYear();
+const items = [
+  { href: links.telegramChannel, label: footer.channel },
+  { href: links.instagram, label: footer.instagram },
+  { href: links.rkn, label: footer.rkn },
+  { href: links.ads, label: footer.ads },
+];
+---
+
+<footer class="footer">
+  <div class="container inner">
+    <p class="name">{person.name}, {person.role.toLowerCase()}</p>
+    <ul>
+      {
+        items.map((item) => (
+          <li>
+            <a href={item.href} target="_blank" rel="noopener">
+              {item.label}
+              <span class="visually-hidden"> (откроется в новой вкладке)</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="copy">© {year}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 3rem;
+    font-size: var(--fs-small);
+    color: var(--ink-soft);
+  }
+
+  .inner {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .name {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-block;
+    padding-block: 0.6rem;
+  }
+
+  @media (min-width: 60em) {
+    .inner {
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    ul {
+      justify-content: center;
+    }
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+import Button from './Button.astro';
+import { cta, finalCta, links } from '../content/site';
+---
+
+<section class="final" aria-labelledby="final-title">
+  <div class="container inner" data-reveal-group="140">
+    <h2 id="final-title" data-reveal="up">{finalCta.title}</h2>
+    <p data-reveal="up">{finalCta.text}</p>
+    <div data-reveal="scale"><Button href={links.telegramDm} variant="light">{cta.primary}</Button></div>
+  </div>
+</section>
+
+<style>
+  .final {
+    padding-block: var(--section-y);
+    background: var(--pink);
+    color: var(--on-pink);
+  }
+
+  .inner {
+    display: grid;
+    justify-items: start;
+    gap: 1.5rem;
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 1.8rem + 3.6vw, 5rem);
+    line-height: 1;
+    max-width: 14em;
+  }
+
+  p {
+    max-width: 32em;
+    font-size: var(--fs-lead);
+    margin-bottom: 0.75rem;
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import DraftBanner from '../components/DraftBanner.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Ticker from '../components/Ticker.astro';
+import Pains from '../components/Pains.astro';
+import Service from '../components/Service.astro';
+import Steps from '../components/Steps.astro';
+import About from '../components/About.astro';
+import Examples from '../components/Examples.astro';
+import Reviews from '../components/Reviews.astro';
+import FaqSection from '../components/FaqSection.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+
+const isDraft = import.meta.env.PUBLIC_DRAFT !== 'false';
+---
+
+<Base>
+  <div id="top"></div>
+  {isDraft && <DraftBanner />}
+  <Header />
+  <main id="main">
+    <Hero />
+    <Ticker />
+    <Pains />
+    <Service />
+    <Steps />
+    <About />
+    <Examples />
+    <Reviews />
+    <FaqSection />
+    <FinalCta />
+  </main>
+  <Footer />
+</Base>

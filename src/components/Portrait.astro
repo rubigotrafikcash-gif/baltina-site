@@ -1,0 +1,80 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+
+interface Props {
+  /** Настоящее фото из src/assets. Пока не передано — показывается заглушка. */
+  src?: ImageMetadata;
+  alt: string;
+  note: string;
+}
+
+const { src, alt, note } = Astro.props;
+---
+
+<figure class="portrait">
+  {
+    src ? (
+      <Picture
+        src={src}
+        alt={alt}
+        formats={['avif', 'webp']}
+        widths={[360, 560, 800]}
+        sizes="(min-width: 60em) 40vw, 90vw"
+        loading="lazy"
+        decoding="async"
+        class="photo"
+      />
+    ) : (
+      <div class="placeholder" role="img" aria-label={note}>
+        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <path
+            d="M27 15a5 5 0 1 1 5 5v4L9 41.5c-1.6 1.2-.8 3.5 1.2 3.5h43.6c2 0 2.8-2.3 1.2-3.5L32 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>{note}</span>
+      </div>
+    )
+  }
+</figure>
+
+<style>
+  .portrait {
+    margin: 0;
+    transform: rotate(1.2deg);
+  }
+
+  .placeholder,
+  .portrait :global(.photo) {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .placeholder {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    background: var(--paper);
+    color: var(--pink);
+    box-shadow: 0 18px 40px -24px rgba(122, 30, 66, 0.35);
+  }
+
+  .placeholder svg {
+    width: 5.5rem;
+  }
+
+  .placeholder span {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--ink-soft);
+  }
+</style>

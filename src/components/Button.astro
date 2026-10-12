@@ -1,0 +1,83 @@
+---
+interface Props {
+  href: string;
+  variant?: 'solid' | 'light' | 'text';
+  external?: boolean;
+  class?: string;
+}
+
+const { href, variant = 'solid', external = true, class: className } = Astro.props;
+const rel = external ? 'noopener' : undefined;
+const target = external ? '_blank' : undefined;
+---
+
+<a
+  href={href}
+  class:list={['btn', `btn--${variant}`, className]}
+  rel={rel}
+  target={target}
+>
+  <slot />
+  {external && <span class="visually-hidden"> (откроется в новой вкладке)</span>}
+</a>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-decoration: none;
+    text-align: center;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .btn--solid {
+    background: var(--pink);
+    color: var(--on-pink);
+  }
+
+  .btn--solid:hover {
+    background: var(--pink-deep);
+    color: var(--on-pink);
+  }
+
+  .btn--light {
+    background: var(--paper);
+    color: var(--pink-deep);
+  }
+
+  .btn--light:hover {
+    background: var(--blush);
+    color: var(--pink-deep);
+  }
+
+  .btn--text {
+    min-height: 2.75rem;
+    padding-inline: 0.25rem;
+    border-radius: 0;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    font-weight: 600;
+  }
+
+  .btn--text:hover {
+    color: var(--pink);
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+</style>

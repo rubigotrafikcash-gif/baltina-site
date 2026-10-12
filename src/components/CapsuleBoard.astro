@@ -1,0 +1,178 @@
+---
+import Garment, { type GarmentKind } from './Garment.astro';
+
+export interface BoardItem {
+  kind: GarmentKind;
+  label: string;
+  fill: string;
+  detail?: string;
+  dots?: string;
+}
+
+interface Props {
+  items: BoardItem[];
+  label: string;
+  caption?: string;
+  /** Раскладка вещей: при загрузке страницы, при появлении на экране или без анимации. */
+  animate?: 'load' | 'view' | false;
+  /** Сила параллакса при прокрутке (0 — выключен). */
+  parallax?: number;
+  tilt?: number;
+  surface?: 'blush' | 'paper';
+}
+
+const { items, label, caption, animate = false, tilt = -1.2, surface = 'blush', parallax = 0 } = Astro.props;
+const turns = [-3, 2, -1.5, 2.5, -2, 1, -2.5, 3, -1];
+---
+
+<figure
+  class:list={[
+    'board',
+    `board--${surface}`,
+    { 'board--load': animate === 'load', 'board--view': animate === 'view' },
+  ]}
+  style={`--tilt:${tilt}deg`}
+  data-reveal={animate === 'view' ? 'board' : undefined}
+  data-parallax={parallax || undefined}
+>
+  <div class="sheet">
+    <span class="tape" aria-hidden="true"></span>
+    <ul class="grid" aria-label={label}>
+      {
+        items.map((item, i) => (
+          <li class="item" style={`--i:${i};--r:${turns[i % turns.length]}deg`}>
+            <Garment kind={item.kind} fill={item.fill} detail={item.detail} dots={item.dots} />
+            <span class="label">{item.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .board {
+    margin: 0;
+  }
+
+  .sheet {
+    position: relative;
+    padding: clamp(1.25rem, 0.8rem + 2vw, 2.25rem) clamp(1rem, 0.6rem + 1.6vw, 2rem);
+    transform: rotate(var(--tilt));
+    box-shadow:
+      0 1px 0 rgba(42, 34, 38, 0.06),
+      0 18px 40px -24px rgba(122, 30, 66, 0.35);
+  }
+
+  .board--blush .sheet {
+    background: var(--blush);
+  }
+
+  .board--paper .sheet {
+    background: var(--paper);
+  }
+
+  .tape {
+    position: absolute;
+    top: -0.8rem;
+    left: 50%;
+    width: 5.5rem;
+    height: 1.6rem;
+    background: rgba(200, 33, 95, 0.78);
+    transform: translateX(-50%) rotate(-4deg);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.5rem, 0.2rem + 1.5vw, 1.5rem) clamp(0.5rem, 0.2rem + 1.2vw, 1.25rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: grid;
+    justify-items: center;
+    gap: 0.15rem;
+    transform: rotate(var(--r));
+  }
+
+  .item :global(.garment) {
+    width: min(100%, 7.5rem);
+  }
+
+  .label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.125rem);
+    line-height: 1.1;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  figcaption {
+    margin-top: 1.5rem;
+    font-size: var(--fs-small);
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  /* Вещи «раскладываются» на лист: при загрузке (первый экран) или при появлении */
+  .board {
+    transform: translate3d(0, var(--py, 0px), 0);
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .board--load .item,
+    :global(.js) .board--view.is-in .item {
+      animation: land 0.75s cubic-bezier(0.2, 0.75, 0.25, 1) backwards;
+      animation-delay: calc(var(--i) * 90ms + 250ms);
+    }
+
+    .board--load .tape,
+    :global(.js) .board--view.is-in .tape {
+      animation: tape 0.5s ease-out 0.1s both;
+    }
+
+    :global(.js) .board--view:not(.is-in) .item,
+    :global(.js) .board--view:not(.is-in) .tape {
+      opacity: 0;
+    }
+
+    /* Вещь на доске чуть «оживает» под курсором */
+    .item {
+      transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+    }
+
+    .item:hover {
+      transform: rotate(calc(var(--r) * -1.5)) translateY(-6px) scale(1.06);
+    }
+  }
+
+  @keyframes land {
+    from {
+      opacity: 0;
+      transform: translateY(-18px) rotate(calc(var(--r) * -2.5)) scale(1.04);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(var(--r)) scale(1);
+    }
+  }
+
+  @keyframes tape {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) rotate(-4deg) scaleX(0.3);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(-50%) rotate(-4deg) scaleX(1);
+    }
+  }
+</style>

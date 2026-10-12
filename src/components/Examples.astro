@@ -1,0 +1,81 @@
+---
+import CapsuleBoard, { type BoardItem } from './CapsuleBoard.astro';
+import { examples } from '../content/site';
+
+const boards: Record<string, BoardItem[]> = {
+  'pink-green': [
+    { kind: 'jacket', label: 'жакет', fill: 'var(--g-sage)' },
+    { kind: 'top', label: 'топ', fill: 'var(--g-blush)' },
+    { kind: 'trousers', label: 'брюки', fill: 'var(--pink)', detail: '#ffffff' },
+    { kind: 'skirt', label: 'юбка', fill: 'var(--g-sage)' },
+    { kind: 'sneakers', label: 'кеды', fill: 'var(--g-white)' },
+    { kind: 'bag', label: 'сумка', fill: 'var(--g-blush)' },
+  ],
+  print: [
+    { kind: 'skirt', label: 'юбка в горошек', fill: 'var(--g-white)', dots: 'var(--ink)' },
+    { kind: 'top', label: 'блуза', fill: 'var(--g-blush)' },
+    { kind: 'dress', label: 'платье-принт', fill: 'var(--g-blush)', dots: 'var(--pink)' },
+    { kind: 'sweater', label: 'кардиган', fill: 'var(--g-sand)' },
+    { kind: 'heels', label: 'лодочки', fill: 'var(--pink)', detail: '#ffffff' },
+    { kind: 'bag', label: 'клатч', fill: 'var(--g-graphite)', detail: '#f3e7eb' },
+  ],
+};
+---
+
+<section id="examples" class="section" aria-labelledby="examples-title">
+  <div class="container">
+    <h2 id="examples-title" class="h2" data-reveal="title"><span>{examples.title}</span></h2>
+    <p class="note">{examples.note}</p>
+
+    <div class="grid">
+      {
+        examples.boards.map((b, i) => (
+          <article class="item">
+            <CapsuleBoard
+              items={boards[b.id] ?? []}
+              label={`Вещи в капсуле «${b.title}»`}
+              tilt={i % 2 === 0 ? -1 : 1.2}
+              animate="view"
+              parallax={i % 2 === 0 ? -0.05 : 0.05}
+            />
+            <h3 data-reveal="up">{b.title}</h3>
+            <p data-reveal="up">{b.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .note {
+    margin-top: 1rem;
+    max-width: 40em;
+    font-size: var(--fs-small);
+    color: var(--ink-soft);
+  }
+
+  .grid {
+    display: grid;
+    gap: 4rem;
+    margin-top: clamp(3rem, 2.5rem + 2vw, 4.5rem);
+  }
+
+  .item h3 {
+    margin-top: 2.25rem;
+    font-size: var(--fs-h3);
+  }
+
+  .item p {
+    margin-top: 0.5rem;
+    max-width: 30em;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 48em) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(2.5rem, 2rem + 3vw, 5rem);
+    }
+  }
+</style>

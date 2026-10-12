@@ -1,0 +1,83 @@
+---
+// Бегущая строка-разделитель: словарь капсулы. Декоративная, дублирует смысл страницы.
+const words = [
+  'капсула',
+  'лукбук',
+  'онлайн-шопинг',
+  'минимум вещей',
+  'максимум образов',
+  'ваши вещи работают',
+  'женственно, но не кукольно',
+];
+const row = [...words, ...words];
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="track">
+    {
+      row.map((w) => (
+        <span class="word">
+          {w}
+          <svg viewBox="0 0 64 64" class="icon">
+            <path
+              d="M27 15a5 5 0 1 1 5 5v4L9 41.5c-1.6 1.2-.8 3.5 1.2 3.5h43.6c2 0 2.8-2.3 1.2-3.5L32 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .ticker {
+    overflow: hidden;
+    border-block: 1px solid var(--ink);
+    padding-block: clamp(0.9rem, 0.7rem + 0.8vw, 1.4rem);
+    background: var(--paper);
+  }
+
+  .track {
+    display: flex;
+    width: max-content;
+  }
+
+  .word {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(1.25rem, 1rem + 1.5vw, 2.5rem);
+    padding-right: clamp(1.25rem, 1rem + 1.5vw, 2.5rem);
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.75rem, 1.3rem + 2.2vw, 3.25rem);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .icon {
+    width: 0.8em;
+    color: var(--pink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      animation: run 45s linear infinite;
+    }
+
+    .ticker:hover .track {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes run {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

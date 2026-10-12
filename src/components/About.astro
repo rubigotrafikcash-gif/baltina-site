@@ -1,0 +1,46 @@
+---
+import Portrait from './Portrait.astro';
+import { about, person } from '../content/site';
+---
+
+<section id="about" class="section section--blush" aria-labelledby="about-title">
+  <div class="container grid">
+    <div class="media" data-reveal="tilt">
+      <Portrait alt={`${person.name}, стилист`} note={about.photoNote} />
+    </div>
+    <div class="text" data-reveal-group="120">
+      <h2 id="about-title" class="h2" data-reveal="title"><span>{about.title}</span></h2>
+      {about.paragraphs.map((p) => <p data-reveal="up">{p}</p>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 3vw, 5rem);
+    align-items: center;
+  }
+
+  .media {
+    width: 100%;
+    max-width: 26rem;
+    justify-self: center;
+  }
+
+  .text p {
+    margin-top: 1.25rem;
+    max-width: 34em;
+  }
+
+  .text p:first-of-type {
+    margin-top: 1.75rem;
+    font-size: var(--fs-lead);
+  }
+
+  @media (min-width: 60em) {
+    .grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+  }
+</style>

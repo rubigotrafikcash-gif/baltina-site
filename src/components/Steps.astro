@@ -1,0 +1,109 @@
+---
+import { steps } from '../content/site';
+---
+
+<section id="steps" class="section steps" aria-labelledby="steps-title">
+  <div class="container">
+    <h2 id="steps-title" class="h2" data-reveal="title"><span>{steps.title}</span></h2>
+
+    <ol class="list" data-reveal-group="150">
+      {
+        steps.items.map((step, i) => (
+          <li data-reveal="up">
+            <span class="num" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="note" data-reveal="up">{steps.duration}</p>
+  </div>
+</section>
+
+<style>
+  .steps {
+    padding-top: 0;
+  }
+
+  .list {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.25rem;
+    align-items: baseline;
+  }
+
+  .num {
+    grid-row: span 2;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(3.5rem, 3rem + 2vw, 5rem);
+    line-height: 0.8;
+    color: var(--pink);
+    min-width: 0.6em;
+    font-variant-numeric: lining-nums;
+  }
+
+  h3 {
+    font-size: var(--fs-h3);
+  }
+
+  li p {
+    grid-column: 2;
+    margin-top: 0.5rem;
+    color: var(--ink-soft);
+  }
+
+  .note {
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+    line-height: 1.3;
+  }
+
+  @media (min-width: 48em) {
+    .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 3rem 4rem;
+    }
+  }
+
+  @media (min-width: 72em) {
+    .list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 2.5rem;
+    }
+
+    /* Подсетка выравнивает цифры, заголовки и текст шагов по одной линии */
+    li {
+      grid-template-columns: 1fr;
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+      row-gap: 0.75rem;
+      align-items: start;
+    }
+
+    .num {
+      grid-row: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    li p {
+      grid-column: 1;
+      margin-top: 0;
+    }
+  }
+</style>

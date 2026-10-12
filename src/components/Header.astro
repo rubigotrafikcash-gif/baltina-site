@@ -1,0 +1,130 @@
+---
+import Button from './Button.astro';
+import MobileMenu from './MobileMenu';
+import { cta, links, nav, person } from '../content/site';
+---
+
+<header class="header">
+  <div class="container bar">
+    <a class="wordmark" href="#top" aria-label={`${person.shortName}, на главную`}>
+      {person.shortName}
+    </a>
+
+    <nav class="nav" aria-label="Разделы страницы">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <Button href={links.telegramDm} class="header-cta">{cta.short}</Button>
+      <MobileMenu
+        client:media="(max-width: 47.99em)"
+        items={nav.map((i) => ({ href: i.href, label: i.label }))}
+        ctaHref={links.telegramDm}
+        ctaLabel={cta.primary}
+      />
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @supports (backdrop-filter: blur(8px)) {
+    .header {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: var(--header-h);
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: clamp(1rem, 2vw, 2rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav a {
+    display: inline-block;
+    padding-block: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 550;
+    text-decoration: none;
+  }
+
+  .nav a:hover {
+    text-decoration: underline;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .actions :global(.header-cta) {
+    min-height: 2.75rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 47.99em) {
+    .bar {
+      gap: 0.5rem;
+    }
+
+    .wordmark {
+      font-size: 1.2rem;
+    }
+
+    .actions {
+      gap: 0.25rem;
+    }
+
+    .actions :global(.header-cta) {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (min-width: 48em) {
+    .nav {
+      display: block;
+    }
+  }
+</style>

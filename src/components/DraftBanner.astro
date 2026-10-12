@@ -1,0 +1,20 @@
+---
+import { draft } from '../content/site';
+---
+
+<aside class="draft" aria-label="Статус страницы">
+  <p class="container">{draft.banner}</p>
+</aside>
+
+<style>
+  .draft {
+    background: var(--ink);
+    color: #f6eef1;
+    font-size: var(--fs-small);
+    line-height: 1.45;
+  }
+
+  .draft p {
+    padding-block: 0.55rem;
+  }
+</style>

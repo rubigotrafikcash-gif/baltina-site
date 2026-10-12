@@ -1,0 +1,32 @@
+---
+import Faq from './Faq';
+import { cta, faq, links } from '../content/site';
+---
+
+<section id="faq" class="section section--blush" aria-labelledby="faq-title">
+  <div class="container grid">
+    <h2 id="faq-title" class="h2" data-reveal="title"><span>{faq.title}</span></h2>
+    <div data-reveal="up">
+    <Faq
+      client:visible
+      items={faq.items.map((i) => ({ ...i }))}
+      priceHref={links.telegramDm}
+      priceLabel={cta.price}
+    />
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 60em) {
+    .grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 4rem;
+    }
+  }
+</style>

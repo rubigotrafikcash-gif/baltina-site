@@ -1,0 +1,53 @@
+---
+import { pains } from '../content/site';
+---
+
+<section class="section section--blush" aria-labelledby="pains-title">
+  <div class="container grid">
+    <h2 id="pains-title" class="h2" data-reveal="title"><span>{pains.title}</span></h2>
+    <div>
+      <ul class="list" data-reveal-group="160">
+        {pains.items.map((item) => <li data-reveal="left">{item}</li>)}
+      </ul>
+      <p class="outro" data-reveal="up">{pains.outro}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .list {
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .list li {
+    padding-block: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .outro {
+    margin-top: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+    max-width: 34em;
+    font-size: var(--fs-lead);
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 60em) {
+    .grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 4rem;
+    }
+  }
+</style>

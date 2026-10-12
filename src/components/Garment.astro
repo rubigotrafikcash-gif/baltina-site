@@ -1,0 +1,163 @@
+---
+/**
+ * Плоские иллюстрации вещей для капсул-заглушек.
+ * Рисованы вручную в SVG, чтобы не зависеть от чужих фото в черновике.
+ */
+export type GarmentKind =
+  | 'jacket'
+  | 'top'
+  | 'sweater'
+  | 'skirt'
+  | 'trousers'
+  | 'dress'
+  | 'sneakers'
+  | 'heels'
+  | 'bag';
+
+interface Props {
+  kind: GarmentKind;
+  fill: string;
+  /** Цвет деталей (швы, лацканы). По умолчанию — цвет контура. */
+  detail?: string;
+  /** Принт: горошек указанного цвета. */
+  dots?: string;
+}
+
+const { kind, fill, detail = 'var(--ink)', dots } = Astro.props;
+const patternId = dots ? `dots-${Math.random().toString(36).slice(2, 9)}` : undefined;
+const paint = patternId ? `url(#${patternId})` : fill;
+---
+
+<svg
+  class="garment"
+  viewBox="0 0 120 140"
+  aria-hidden="true"
+  focusable="false"
+  fill="none"
+  stroke="var(--ink)"
+  stroke-width="1.6"
+  stroke-linejoin="round"
+  stroke-linecap="round"
+>
+  {
+    patternId && (
+      <defs>
+        <pattern id={patternId} width="11" height="11" patternUnits="userSpaceOnUse">
+          <rect width="11" height="11" fill={fill} stroke="none" />
+          <circle cx="3" cy="3" r="1.7" fill={dots} stroke="none" />
+          <circle cx="8.5" cy="8.5" r="1.7" fill={dots} stroke="none" />
+        </pattern>
+      </defs>
+    )
+  }
+
+  {
+    kind === 'jacket' && (
+      <g>
+        <path
+          fill={paint}
+          d="M44 14 60 22 76 14 96 22Q100 24 101 30L108 110 94 112 90 62V128H30V62L26 112 12 110 19 30Q20 24 24 22Z"
+        />
+        <path stroke={detail} d="M44 14 50 56 60 74 70 56 76 14M60 74V128M36 102H50M70 102H84" />
+        <circle cx="64" cy="88" r="2.2" fill={detail} stroke="none" />
+        <circle cx="64" cy="104" r="2.2" fill={detail} stroke="none" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'top' && (
+      <g>
+        <path fill={paint} d="M44 18Q60 32 76 18L98 28 92 54 84 51V124H36V51L28 54 22 28Z" />
+        <path stroke={detail} d="M84 51 88 30M36 51 32 30M36 116H84" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'sweater' && (
+      <g>
+        <path
+          fill={paint}
+          d="M46 14Q60 24 74 14L96 24Q102 28 103 36L108 108 94 110 88 52V122H32V52L26 110 12 108 17 36Q18 28 24 24Z"
+        />
+        <path
+          stroke={detail}
+          d="M49 18Q60 28 71 18M32 113H88M13 99 27 101M93 101 107 99M88 52 92 30M32 52 28 30"
+        />
+      </g>
+    )
+  }
+
+  {
+    kind === 'skirt' && (
+      <g>
+        <path fill={paint} d="M38 24H82L100 128H20Z" />
+        <path fill={fill} d="M38 13H82V24H38Z" />
+        <path stroke={detail} d="M50 24 43 128M60 24V128M70 24 77 128" opacity="0.55" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'trousers' && (
+      <g>
+        <path fill={paint} d="M34 12H86L94 132H68L60 46 52 132H26Z" />
+        <path stroke={detail} d="M34.6 22H85.4M60 22V46M44 30 39 132M76 30 81 132" opacity="0.7" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'dress' && (
+      <g>
+        <path fill={paint} d="M44 32Q60 42 76 32L80 60 98 130H22L40 60Z" />
+        <path stroke={detail} d="M47 33 50 10M73 33 70 10M40 60H80" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'sneakers' && (
+      <g transform="translate(0 -8)">
+        <path
+          fill={paint}
+          d="M16 96V76Q17 64 30 62L56 58Q64 58 70 66L80 74Q100 78 106 86V96Z"
+        />
+        <path fill="var(--g-white)" d="M12 96H110V103Q110 108 105 108H17Q12 108 12 103Z" />
+        <path stroke={detail} d="M44 64 50 76M52 62 58 74M60 64 64 72M84 76Q97 80 99 96" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'heels' && (
+      <g transform="translate(0 -6)">
+        <path
+          fill={paint}
+          d="M20 62Q22 59 26 61Q40 80 66 84Q92 86 104 92Q109 95 106 98H58Q42 97 34 86L30 84 29 114H24L21 76Z"
+        />
+        <path fill="var(--g-blush)" stroke={detail} d="M25 62Q39 78 63 83Q45 84 33 75Z" />
+      </g>
+    )
+  }
+
+  {
+    kind === 'bag' && (
+      <g>
+        <path stroke-width="3" d="M42 54Q42 26 60 26 78 26 78 54" />
+        <path fill={paint} d="M24 54H96L102 116Q102 120 98 120H22Q18 120 18 116Z" />
+        <path stroke={detail} d="M24 54 60 78 96 54" />
+        <circle cx="60" cy="78" r="3.2" fill={detail} stroke="none" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .garment {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+</style>

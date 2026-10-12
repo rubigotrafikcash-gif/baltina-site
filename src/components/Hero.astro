@@ -1,0 +1,155 @@
+---
+import Button from './Button.astro';
+import CapsuleBoard, { type BoardItem } from './CapsuleBoard.astro';
+import { cta, hero, links } from '../content/site';
+
+const items: BoardItem[] = [
+  { kind: 'jacket', label: 'жакет', fill: 'var(--g-graphite)', detail: '#f3e7eb' },
+  { kind: 'top', label: 'топ', fill: 'var(--g-white)' },
+  { kind: 'sweater', label: 'свитер', fill: 'var(--g-blush)' },
+  { kind: 'skirt', label: 'юбка-миди', fill: 'var(--pink)', detail: '#ffffff' },
+  { kind: 'trousers', label: 'брюки', fill: 'var(--g-sand)' },
+  { kind: 'dress', label: 'платье', fill: 'var(--g-sage)' },
+  { kind: 'sneakers', label: 'кеды', fill: 'var(--g-blush)' },
+  { kind: 'heels', label: 'лодочки', fill: 'var(--g-graphite)', detail: '#f3e7eb' },
+  { kind: 'bag', label: 'сумка', fill: 'var(--g-sand)' },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container grid">
+    <div class="copy">
+      <h1 id="hero-title" aria-label={hero.title}>
+        {
+          hero.title.split(' ').map((word, i) => (
+            <span class="w" aria-hidden="true" style={`--i:${i}`}>
+              <span>{word}</span>
+            </span>
+          ))
+        }
+      </h1>
+      <p class="lead intro" style="--i:9">{hero.lead}</p>
+      <div class="actions intro" style="--i:11">
+        <Button href={links.telegramDm}>{cta.primary}</Button>
+        <Button href={hero.secondary.href} variant="text" external={false}>
+          {hero.secondary.label}
+        </Button>
+      </div>
+    </div>
+
+    <div class="visual">
+      <CapsuleBoard
+        items={items}
+        label="Пример капсулы: девять вещей"
+        caption={hero.boardCaption}
+        animate="load"
+        parallax={-0.08}
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(2.5rem, 1.5rem + 5vw, 6rem) clamp(3.5rem, 2rem + 5vw, 7rem);
+  }
+
+  .grid {
+    display: grid;
+    gap: clamp(2.75rem, 2rem + 4vw, 5rem);
+    align-items: center;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    max-width: 13em;
+  }
+
+  .lead {
+    margin-top: clamp(1.25rem, 1rem + 1vw, 2rem);
+    max-width: 30em;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  }
+
+  /* Заголовок поднимается по словам, затем появляются подзаголовок и кнопки */
+  .w {
+    display: inline-block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+    vertical-align: top;
+  }
+
+  .w > span {
+    display: inline-block;
+  }
+
+  .w + .w {
+    margin-left: 0.25em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .w > span {
+      animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      animation-delay: calc(var(--i) * 70ms + 100ms);
+    }
+
+    .intro {
+      animation: fade-up 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      animation-delay: calc(var(--i) * 70ms + 150ms);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(105%) rotate(4deg);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .visual {
+    width: 100%;
+    max-width: 34rem;
+    justify-self: center;
+  }
+
+  @media (max-width: 29.99em) {
+    .actions :global(.btn--solid) {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 60em) {
+    .grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+
+    .visual {
+      justify-self: end;
+    }
+  }
+</style>
