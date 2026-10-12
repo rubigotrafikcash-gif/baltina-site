@@ -69,10 +69,8 @@ const row = [...words, ...words];
     animation: run 45s linear infinite;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .track {
-      animation-duration: 120s;
-    }
+  :global(.motion-reduced) .track {
+    animation-duration: 120s;
   }
 
   @media all {

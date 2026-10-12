@@ -185,10 +185,8 @@ a:hover {
 
 /* При «уменьшить движение» убираем плавную прокрутку и большие сдвиги,
    но оставляем мягкие появления по прозрачности */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+.motion-reduced {
+  scroll-behavior: auto;
 }
 
 /* ---------- Анимации при прокрутке ----------
@@ -225,10 +223,8 @@ a:hover {
 
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .js [data-reveal]:not(.is-in) {
-    transform: none;
-  }
+.motion-reduced [data-reveal]:not(.is-in) {
+  transform: none;
 }
 
 /* Полоса прогресса чтения */
@@ -253,11 +249,37 @@ a:hover {
   visibility: hidden;
 }
 
+.motion-reduced [data-split],
+.motion-reduced [data-hero-fade],
+.motion-reduced [data-final-fade] {
+  visibility: visible;
+}
+
+/* Кнопка «Включить анимацию» — видна, только если в системе включено «уменьшить движение» */
+.motion-toggle {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .js [data-split],
-  .js [data-hero-fade],
-  .js [data-final-fade] {
-    visibility: visible;
+  .motion-toggle {
+    position: fixed;
+    left: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    z-index: 120;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 30px -12px rgba(42, 34, 38, 0.6);
   }
 }
 

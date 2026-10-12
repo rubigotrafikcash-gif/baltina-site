@@ -1,10 +1,26 @@
 ---
 import { draft } from '../content/site';
+
+// Номер версии: в GitHub Actions — короткий хэш коммита, локально — время сборки
+const sha = process.env.GITHUB_SHA?.slice(0, 7);
+const version = sha ?? new Date().toISOString().slice(0, 16).replace('T', ' ');
 ---
 
 <aside class="draft" aria-label="Статус страницы">
-  <p class="container">{draft.banner}</p>
+  <p class="container">
+    {draft.banner}
+    <span class="meta">Версия {version}. Анимация: <span data-motion-state>полная</span>.</span>
+  </p>
 </aside>
+
+<script is:inline>
+  (function () {
+    var el = document.querySelector('[data-motion-state]');
+    if (el && document.documentElement.classList.contains('motion-reduced')) {
+      el.textContent = 'упрощённая (в системе включено «уменьшить движение»)';
+    }
+  })();
+</script>
 
 <style>
   .draft {
@@ -16,5 +32,10 @@ import { draft } from '../content/site';
 
   .draft p {
     padding-block: 0.55rem;
+  }
+
+  .meta {
+    margin-left: 0.5em;
+    opacity: 0.7;
   }
 </style>

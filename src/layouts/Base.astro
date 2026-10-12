@@ -94,8 +94,20 @@ const jsonLd = {
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
+        // Анимацию можно включить принудительно, даже если в системе стоит «уменьшить движение»:
+        // кнопкой на странице (запоминается) или ссылкой с ?motion=1
+        var forced = false;
         try {
-          if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('intro')) {
+          var q = new URLSearchParams(location.search).get('motion');
+          if (q === '1') localStorage.setItem('motion', 'on');
+          if (q === '0') localStorage.removeItem('motion');
+          forced = localStorage.getItem('motion') === 'on';
+        } catch (e) {}
+        if (forced) d.classList.add('motion-forced');
+        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches && !forced;
+        if (reduce) d.classList.add('motion-reduced');
+        try {
+          if (!reduce && !sessionStorage.getItem('intro')) {
             d.classList.add('intro-on');
             sessionStorage.setItem('intro', '1');
           }

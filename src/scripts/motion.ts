@@ -22,7 +22,8 @@ declare global {
 window.__motion = true;
 
 const root = document.documentElement;
-const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Класс ставит встроенный скрипт в <head>: учитывает системную настройку и ручное включение
+const reduce = root.classList.contains('motion-reduced');
 const $ = <T extends Element = HTMLElement>(sel: string, ctx: ParentNode = document) =>
   ctx.querySelector<T>(sel);
 const $$ = <T extends Element = HTMLElement>(sel: string, ctx: ParentNode = document) => [
@@ -75,6 +76,7 @@ function initProgress() {
 }
 
 initSoftReveals();
+initMotionToggle();
 
 if (reduce) {
   showStatic();
@@ -637,5 +639,24 @@ function initPointer() {
       xTo(0);
       yTo(0);
     });
+  });
+}
+
+/* ---------- Кнопка «Включить / выключить анимацию» ---------- */
+function initMotionToggle() {
+  const btn = $<HTMLButtonElement>('[data-motion-toggle]');
+  if (!btn) return;
+  const forced = root.classList.contains('motion-forced');
+  btn.textContent = forced ? 'Выключить анимацию' : 'Включить анимацию';
+  btn.addEventListener('click', () => {
+    try {
+      if (forced) localStorage.removeItem('motion');
+      else localStorage.setItem('motion', 'on');
+    } catch {
+      /* без хранилища — просто перезагрузим со ссылкой */
+    }
+    const url = new URL(location.href);
+    url.searchParams.set('motion', forced ? '0' : '1');
+    location.replace(url.toString());
   });
 }
