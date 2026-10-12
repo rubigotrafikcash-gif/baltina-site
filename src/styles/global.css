@@ -223,35 +223,11 @@ a:hover {
     transform: translateY(3rem) rotate(-6deg);
   }
 
-  /* Заголовки секций: поднимаются из-под линии */
-  .js [data-reveal='title'] {
-    display: block;
-    overflow: hidden;
-  }
-
-  .js [data-reveal='title'] > span {
-    display: inline-block;
-    transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transition-delay: var(--d, 0ms);
-  }
-
-  .js [data-reveal='title']:not(.is-in) > span {
-    transform: translateY(110%);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .js [data-reveal]:not(.is-in),
-  .js [data-reveal='title']:not(.is-in) > span {
+  .js [data-reveal]:not(.is-in) {
     transform: none;
-  }
-
-  .js [data-reveal='title']:not(.is-in) > span {
-    opacity: 0;
-  }
-
-  .js [data-reveal='title'] > span {
-    transition: opacity 0.9s ease;
   }
 }
 
@@ -267,4 +243,43 @@ a:hover {
   transform-origin: 0 50%;
   transform: scaleX(var(--progress, 0));
   pointer-events: none;
+}
+
+/* Пока скрипт не разбил текст на строки, прячем его, чтобы не было «мигания».
+   Если скрипт не загрузился (.motion-failed) — всё показывается. */
+.js:not(.motion-failed) [data-split],
+.js:not(.motion-failed) [data-hero-fade],
+.js:not(.motion-failed) [data-final-fade] {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-split],
+  .js [data-hero-fade],
+  .js [data-final-fade] {
+    visibility: visible;
+  }
+}
+
+/* Шапка прячется при прокрутке вниз и возвращается при прокрутке вверх */
+.header {
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.header--hidden {
+  transform: translateY(-100%);
+}
+
+/* Lenis: рекомендованные стили плавной прокрутки */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }

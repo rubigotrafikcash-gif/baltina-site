@@ -5,7 +5,7 @@ const slots = Array.from({ length: reviews.count });
 
 <section id="reviews" class="section reviews" aria-labelledby="reviews-title">
   <div class="container">
-    <h2 id="reviews-title" class="h2" data-reveal="title"><span>{reviews.title}</span></h2>
+    <h2 id="reviews-title" class="h2" data-split="lines"><span>{reviews.title}</span></h2>
     <ul class="grid" data-reveal-group="150">
       {
         slots.map(() => (

@@ -1,0 +1,41 @@
+---
+import { person } from '../content/site';
+---
+
+<!-- Заставка при первом заходе в сессии. Показывается, только если включена анимация. -->
+<div class="intro" data-intro aria-hidden="true">
+  <span class="name">{person.shortName}</span>
+  <span class="sub">стилист онлайн</span>
+</div>
+
+<style>
+  .intro {
+    display: none;
+  }
+
+  :global(.intro-on) .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.75rem;
+    background: var(--pink);
+    color: var(--on-pink);
+  }
+
+  .name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(3rem, 2rem + 6vw, 8rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.1rem, 1rem + 0.6vw, 1.5rem);
+  }
+</style>

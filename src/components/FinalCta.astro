@@ -3,19 +3,39 @@ import Button from './Button.astro';
 import { cta, finalCta, links } from '../content/site';
 ---
 
-<section class="final" aria-labelledby="final-title">
-  <div class="container inner" data-reveal-group="140">
-    <h2 id="final-title" data-reveal="up">{finalCta.title}</h2>
-    <p data-reveal="up">{finalCta.text}</p>
-    <div data-reveal="scale"><Button href={links.telegramDm} variant="light">{cta.primary}</Button></div>
+<section class="final" aria-labelledby="final-title" data-final>
+  <span class="bg" aria-hidden="true" data-final-bg></span>
+  <div class="container inner">
+    <h2 id="final-title" data-split="final">{finalCta.title}</h2>
+    <p data-final-fade>{finalCta.text}</p>
+    <div data-final-fade><Button href={links.telegramDm} variant="light">{cta.primary}</Button></div>
   </div>
 </section>
 
 <style>
   .final {
-    padding-block: var(--section-y);
+    position: relative;
+    isolation: isolate;
+    padding-block: calc(var(--section-y) * 1.4);
     background: var(--pink);
     color: var(--on-pink);
+    overflow: hidden;
+  }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--pink);
+  }
+
+  /* В режиме анимации розовый «разливается» кругом из центра */
+  :global(.final--motion) {
+    background: var(--paper);
+  }
+
+  :global(.final--motion) .bg {
+    clip-path: circle(0% at 50% 55%);
   }
 
   .inner {

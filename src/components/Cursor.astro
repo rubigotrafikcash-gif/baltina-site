@@ -1,0 +1,60 @@
+<!-- Курсор-кольцо для мыши. Включается скриптом только на устройствах с точным указателем. -->
+<div class="cursor" aria-hidden="true" data-cursor>
+  <span class="label" data-cursor-label></span>
+</div>
+
+<style>
+  .cursor {
+    display: none;
+  }
+
+  :global(.cursor-on) .cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 150;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: -1.125rem 0 0 -1.125rem;
+    border: 1.5px solid var(--pink);
+    border-radius: 50%;
+    pointer-events: none;
+    transition:
+      width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      margin 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  :global(.cursor-on) .cursor.is-link {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: -2.25rem 0 0 -2.25rem;
+    background: rgba(200, 33, 95, 0.12);
+  }
+
+  :global(.cursor-on) .cursor.has-label {
+    width: 6.5rem;
+    height: 6.5rem;
+    margin: -3.25rem 0 0 -3.25rem;
+    background: var(--pink);
+    border-color: var(--pink);
+  }
+
+  .label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  :global(.cursor-on) .cursor.has-label .label {
+    opacity: 1;
+  }
+</style>

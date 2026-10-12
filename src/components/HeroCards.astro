@@ -1,0 +1,167 @@
+---
+/** Веер карточек-лукбука на первом экране. Вещи — те же SVG, что в капсуле. */
+import Garment, { type GarmentKind } from './Garment.astro';
+import { heroLooks } from '../content/site';
+
+interface Piece {
+  kind: GarmentKind;
+  fill: string;
+  detail?: string;
+  dots?: string;
+  size: number;
+}
+
+const looks: { bg: string; pieces: Piece[] }[] = [
+  {
+    bg: 'var(--blush)',
+    pieces: [
+      { kind: 'jacket', fill: 'var(--g-graphite)', detail: '#f3e7eb', size: 58 },
+      { kind: 'trousers', fill: 'var(--g-sand)', size: 50 },
+      { kind: 'heels', fill: 'var(--g-graphite)', detail: '#f3e7eb', size: 40 },
+    ],
+  },
+  {
+    bg: '#ffffff',
+    pieces: [
+      { kind: 'sweater', fill: 'var(--g-blush)', size: 58 },
+      { kind: 'skirt', fill: 'var(--pink)', detail: '#ffffff', size: 50 },
+      { kind: 'sneakers', fill: 'var(--g-white)', size: 40 },
+    ],
+  },
+  {
+    bg: '#f4ece3',
+    pieces: [
+      { kind: 'dress', fill: 'var(--g-blush)', dots: 'var(--pink)', size: 64 },
+      { kind: 'bag', fill: 'var(--g-graphite)', detail: '#f3e7eb', size: 36 },
+    ],
+  },
+];
+---
+
+<div class="cards" data-hero-cards>
+  <span class="disc" aria-hidden="true" data-hero-disc></span>
+  <svg class="seal" viewBox="0 0 120 120" aria-hidden="true" data-hero-seal>
+    <defs>
+      <path id="seal-path" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0" />
+    </defs>
+    <g data-seal-ring>
+      <text><textPath href="#seal-path">капсула и лукбук · онлайн-шопинг со стилистом ·</textPath></text>
+    </g>
+    <circle class="seal-core" cx="60" cy="60" r="22" />
+    <path d="M55 51.5a4 4 0 1 1 5 4v3l-13 10c-1 .8-.5 2.2.8 2.2h24.4c1.3 0 1.8-1.4.8-2.2l-13-10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -2)" />
+  </svg>
+  {
+    looks.map((look, i) => (
+      <figure class="card" data-hero-card={i} style={`--bg:${look.bg};--n:${i}`}>
+        <div class="pieces">
+          {look.pieces.map((p) => (
+            <div class="piece" style={`width:${p.size}%`}>
+              <Garment kind={p.kind} fill={p.fill} detail={p.detail} dots={p.dots} />
+            </div>
+          ))}
+        </div>
+        <figcaption>{heroLooks[i]?.label}</figcaption>
+      </figure>
+    ))
+  }
+</div>
+
+<style>
+  .cards {
+    position: relative;
+    width: min(100%, 34rem);
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+    perspective: 1200px;
+  }
+
+  .card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44%;
+    aspect-ratio: 3 / 4.2;
+    margin: 0;
+    padding: 6% 6% 4%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    background: var(--bg);
+    box-shadow:
+      0 1px 0 rgba(42, 34, 38, 0.06),
+      0 30px 60px -30px rgba(122, 30, 66, 0.45);
+    translate: -50% -50%;
+    /* Веер в покое (без JS) */
+    will-change: transform;
+  }
+
+  /* Веер в покое (без JS); скрипт анимирует к этим же значениям */
+  .card[data-hero-card='0'] {
+    transform: translate(-72%, 8%) rotate(-12deg);
+  }
+
+  .card[data-hero-card='1'] {
+    transform: translate(0, -4%) rotate(-1.5deg);
+  }
+
+  .card[data-hero-card='2'] {
+    transform: translate(72%, 8%) rotate(12deg);
+  }
+
+  /* Мягкий диск за колодой и вращающаяся «печать» */
+  .disc {
+    position: absolute;
+    inset: 6%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #fff 0%, var(--blush) 55%, #f7dce4 100%);
+  }
+
+  .seal {
+    position: absolute;
+    left: 0;
+    top: 2%;
+    z-index: 3;
+    width: 30%;
+    color: var(--pink);
+  }
+
+  .seal text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    fill: currentColor;
+  }
+
+  .seal-core {
+    fill: var(--pink);
+  }
+
+  .card[data-hero-card='1'] {
+    z-index: 2;
+  }
+
+  .pieces {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .piece {
+    margin-top: -6%;
+  }
+
+  .piece:first-child {
+    margin-top: 0;
+  }
+
+  figcaption {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1rem, 0.85rem + 0.6vw, 1.35rem);
+    text-align: center;
+    color: var(--ink);
+  }
+</style>

@@ -90,7 +90,25 @@ const jsonLd = {
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <!-- Отмечаем, что JS работает: только тогда блоки прячутся до появления -->
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('intro')) {
+            d.classList.add('intro-on');
+            sessionStorage.setItem('intro', '1');
+          }
+        } catch (e) {}
+        // Если скрипт анимаций не загрузился, через 4 с показываем всё как есть
+        setTimeout(function () {
+          if (!window.__motion) {
+            d.classList.remove('intro-on');
+            d.classList.add('motion-failed');
+          }
+        }, 4000);
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Перейти к содержанию</a>

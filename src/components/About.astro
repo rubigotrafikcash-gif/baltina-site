@@ -5,17 +5,21 @@ import { about, person } from '../content/site';
 
 <section id="about" class="section section--blush" aria-labelledby="about-title">
   <div class="container grid">
-    <div class="media" data-reveal="tilt">
+    <div class="media" data-mask-reveal>
       <Portrait alt={`${person.name}, стилист`} note={about.photoNote} />
     </div>
-    <div class="text" data-reveal-group="120">
-      <h2 id="about-title" class="h2" data-reveal="title"><span>{about.title}</span></h2>
-      {about.paragraphs.map((p) => <p data-reveal="up">{p}</p>)}
+    <div class="text">
+      <h2 id="about-title" class="h2" data-split="lines"><span>{about.title}</span></h2>
+      {about.paragraphs.map((p) => <p data-split="soft">{p}</p>)}
     </div>
   </div>
 </section>
 
 <style>
+  #about {
+    overflow-x: clip;
+  }
+
   .grid {
     display: grid;
     gap: clamp(2.5rem, 2rem + 3vw, 5rem);

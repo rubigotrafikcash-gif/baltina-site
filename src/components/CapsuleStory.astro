@@ -1,0 +1,271 @@
+---
+/**
+ * Главная сцена: полный шкаф → капсула → готовые образы.
+ * Без JS и при «уменьшить движение» показывается капсула-сетка и все три подписи.
+ * С анимацией сцена закрепляется на экране, а прокрутка управляет раскладкой вещей.
+ */
+import Garment, { type GarmentKind } from './Garment.astro';
+import { story } from '../content/site';
+
+interface StoryItem {
+  key: string;
+  kind: GarmentKind;
+  label: string;
+  fill: string;
+  detail?: string;
+  dots?: string;
+  /** Позиция в капсуле-сетке (доли сцены). */
+  gx: number;
+  gy: number;
+}
+
+const cols = [0.18, 0.5, 0.82];
+const rows = [0.17, 0.5, 0.83];
+const items: StoryItem[] = [
+  { key: 'jacket', kind: 'jacket', label: 'жакет', fill: 'var(--g-graphite)', detail: '#f3e7eb', gx: cols[0], gy: rows[0] },
+  { key: 'top', kind: 'top', label: 'топ', fill: 'var(--g-white)', gx: cols[1], gy: rows[0] },
+  { key: 'sweater', kind: 'sweater', label: 'свитер', fill: 'var(--g-blush)', gx: cols[2], gy: rows[0] },
+  { key: 'skirt', kind: 'skirt', label: 'юбка-миди', fill: 'var(--pink)', detail: '#ffffff', gx: cols[0], gy: rows[1] },
+  { key: 'trousers', kind: 'trousers', label: 'брюки', fill: 'var(--g-sand)', gx: cols[1], gy: rows[1] },
+  { key: 'dress', kind: 'dress', label: 'платье', fill: 'var(--g-sage)', gx: cols[2], gy: rows[1] },
+  { key: 'sneakers', kind: 'sneakers', label: 'кеды', fill: 'var(--g-blush)', gx: cols[0], gy: rows[2] },
+  { key: 'heels', kind: 'heels', label: 'лодочки', fill: 'var(--g-graphite)', detail: '#f3e7eb', gx: cols[1], gy: rows[2] },
+  { key: 'bag', kind: 'bag', label: 'сумка', fill: 'var(--g-sand)', gx: cols[2], gy: rows[2] },
+];
+---
+
+<section id="story" class="story" aria-labelledby="story-title" data-story>
+  <div class="pin" data-story-pin>
+    <div class="container layout">
+      <div class="captions">
+        <h2 id="story-title" class="visually-hidden">{story.srTitle}</h2>
+
+        <ol class="rail" aria-hidden="true">
+          {story.steps.map((s, i) => <li data-story-rail={i}>{s}</li>)}
+        </ol>
+
+        <div class="caps">
+          {
+            story.captions.map((c, i) => (
+              <div class="cap" data-story-cap={i}>
+                <p class="cap-title">{c.title}</p>
+                <p class="cap-text">{c.text}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="stage" data-story-stage>
+        <span class="glow" aria-hidden="true" data-story-glow></span>
+        <ul class="items" aria-label="Капсула: девять вещей">
+          {
+            items.map((it) => (
+              <li
+                class="item"
+                data-story-item={it.key}
+                style={`--gx:${it.gx};--gy:${it.gy}`}
+              >
+                <Garment kind={it.kind} fill={it.fill} detail={it.detail} dots={it.dots} />
+                <span class="label">{it.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+        {
+          story.looks.map((l, i) => (
+            <span class="look" data-story-look={i} style={`--lx:${cols[i]}`} aria-hidden="true">
+              {l}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .story {
+    background: var(--blush);
+    overflow: clip;
+  }
+
+  .pin {
+    padding-block: var(--section-y);
+  }
+
+  .layout {
+    display: grid;
+    gap: clamp(2rem, 1.5rem + 3vw, 4rem);
+    align-items: center;
+  }
+
+  .rail {
+    display: flex;
+    gap: 1.25rem;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    list-style: none;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+  }
+
+  .rail li {
+    position: relative;
+    padding-bottom: 0.35rem;
+  }
+
+  .rail li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--pink);
+    transform: scaleX(var(--on, 1));
+    transform-origin: 0 50%;
+  }
+
+  .caps {
+    display: grid;
+    gap: 2.25rem;
+  }
+
+  .cap-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .cap-text {
+    margin-top: 1rem;
+    max-width: 26em;
+    font-size: var(--fs-lead);
+    color: var(--ink-soft);
+  }
+
+  .stage {
+    position: relative;
+    width: min(100%, 36rem);
+    aspect-ratio: 1 / 1.08;
+    justify-self: center;
+  }
+
+  .glow {
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+  }
+
+  .items {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    position: absolute;
+    left: calc(var(--gx) * 100%);
+    top: calc(var(--gy) * 100%);
+    width: 25%;
+    display: grid;
+    justify-items: center;
+    translate: -50% -50%;
+    will-change: transform;
+  }
+
+  .item :global(.garment) {
+    filter: drop-shadow(0 10px 14px rgba(122, 30, 66, 0.16));
+  }
+
+  .label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(0.9rem, 0.8rem + 0.4vw, 1.1rem);
+    line-height: 1.1;
+    color: var(--ink-soft);
+  }
+
+  .look {
+    position: absolute;
+    left: calc(var(--lx) * 100%);
+    bottom: -0.5rem;
+    translate: -50% 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.5rem);
+    color: var(--pink-deep);
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  @media (min-width: 60em) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  /* --- Режим сцены (класс ставит скрипт, когда анимация разрешена) --- */
+  :global(.story--motion) .pin {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding-block: calc(var(--header-h) + 1.5rem) 2rem;
+  }
+
+  :global(.story--motion) .caps {
+    display: grid;
+  }
+
+  :global(.story--motion) .cap {
+    grid-area: 1 / 1;
+  }
+
+  :global(.story--motion) .cap:not(:first-child) {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(.story--motion) .rail li:not(:first-child) {
+    --on: 0;
+  }
+
+  :global(.story--motion) .label {
+    opacity: 0;
+  }
+
+  @media (max-width: 59.99em) {
+    :global(.story--motion) .layout {
+      gap: 1.25rem;
+      align-content: center;
+    }
+
+    :global(.story--motion) .stage {
+      width: min(100%, 52svh);
+    }
+
+    :global(.story--motion) .cap-title {
+      font-size: clamp(1.9rem, 1.4rem + 3vw, 2.6rem);
+    }
+
+    :global(.story--motion) .cap-text {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+
+    :global(.story--motion) .rail {
+      margin-bottom: 1rem;
+    }
+  }
+</style>

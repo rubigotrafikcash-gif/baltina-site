@@ -2,43 +2,54 @@
 import { steps } from '../content/site';
 ---
 
-<section id="steps" class="section steps" aria-labelledby="steps-title">
-  <div class="container">
-    <h2 id="steps-title" class="h2" data-reveal="title"><span>{steps.title}</span></h2>
+<section id="steps" class="section steps" aria-labelledby="steps-title" data-steps>
+  <div class="pin" data-steps-pin>
+    <div class="container head">
+      <h2 id="steps-title" class="h2" data-split="lines"><span>{steps.title}</span></h2>
+      <p class="note">{steps.duration}</p>
+    </div>
 
-    <ol class="list" data-reveal-group="150">
-      {
-        steps.items.map((step, i) => (
-          <li data-reveal="up">
-            <span class="num" aria-hidden="true">
-              {i + 1}
-            </span>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </li>
-        ))
-      }
-    </ol>
-
-    <p class="note" data-reveal="up">{steps.duration}</p>
+    <div class="viewport">
+      <ol class="track container" data-steps-track>
+        {
+          steps.items.map((step, i) => (
+            <li class="step" data-step>
+              <span class="num" aria-hidden="true" data-step-num>
+                {i + 1}
+              </span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
   </div>
 </section>
 
 <style>
-  .steps {
-    padding-top: 0;
+  .head {
+    display: grid;
+    gap: 1rem;
   }
 
-  .list {
+  .note {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+    line-height: 1.3;
+    color: var(--ink-soft);
+  }
+
+  .track {
     display: grid;
     gap: 2.5rem;
     margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
-    padding: 0;
+    padding-block: 0;
     list-style: none;
-    counter-reset: none;
   }
 
-  li {
+  .step {
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: 1.25rem;
@@ -53,57 +64,74 @@ import { steps } from '../content/site';
     line-height: 0.8;
     color: var(--pink);
     min-width: 0.6em;
-    font-variant-numeric: lining-nums;
   }
 
   h3 {
     font-size: var(--fs-h3);
   }
 
-  li p {
+  .step p {
     grid-column: 2;
     margin-top: 0.5rem;
     color: var(--ink-soft);
-  }
-
-  .note {
-    margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
-    line-height: 1.3;
+    max-width: 24em;
   }
 
   @media (min-width: 48em) {
-    .list {
+    .track {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 3rem 4rem;
     }
   }
 
-  @media (min-width: 72em) {
-    .list {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0 2.5rem;
+  @media (min-width: 64em) {
+    .head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
     }
+  }
 
-    /* Подсетка выравнивает цифры, заголовки и текст шагов по одной линии */
-    li {
-      grid-template-columns: 1fr;
-      grid-row: span 3;
-      grid-template-rows: subgrid;
-      row-gap: 0.75rem;
-      align-items: start;
-    }
+  /* --- Горизонтальная лента шагов (ставит скрипт на широких экранах) --- */
+  :global(.steps--motion) {
+    padding-block: 0;
+  }
 
-    .num {
-      grid-row: auto;
-      margin-bottom: 0.5rem;
-    }
+  :global(.steps--motion) .pin {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: calc(var(--header-h) + 2rem) 3rem;
+    overflow: hidden;
+  }
 
-    li p {
-      grid-column: 1;
-      margin-top: 0;
-    }
+  :global(.steps--motion) .track {
+    display: flex;
+    gap: clamp(2rem, 4vw, 5rem);
+    width: max-content;
+    max-width: none;
+    margin-top: clamp(3rem, 6vh, 5rem);
+    padding-right: 30vw;
+  }
+
+  :global(.steps--motion) .step {
+    width: clamp(18rem, 30vw, 27rem);
+    grid-template-columns: 1fr;
+    align-content: start;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  :global(.steps--motion) .num {
+    grid-row: auto;
+    font-size: clamp(7rem, 12vw, 12rem);
+    line-height: 0.85;
+    margin-bottom: 1.5rem;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--pink);
+  }
+
+  :global(.steps--motion) .step p {
+    grid-column: 1;
   }
 </style>
