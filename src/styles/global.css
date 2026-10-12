@@ -183,18 +183,11 @@ a:hover {
   color: var(--paper);
 }
 
+/* При «уменьшить движение» убираем плавную прокрутку и большие сдвиги,
+   но оставляем мягкие появления по прозрачности */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    animation-delay: 0ms !important;
-    transition-duration: 0.01ms !important;
   }
 }
 
@@ -202,7 +195,7 @@ a:hover {
  * Элементы с data-reveal прячутся, только если JS загрузился (класс .js на <html>)
  * и пользователь не просил уменьшить движение. Без JS страница полностью видна.
  */
-@media (prefers-reduced-motion: no-preference) {
+@media all {
   .js [data-reveal] {
     transition:
       opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -244,6 +237,21 @@ a:hover {
 
   .js [data-reveal='title']:not(.is-in) > span {
     transform: translateY(110%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal]:not(.is-in),
+  .js [data-reveal='title']:not(.is-in) > span {
+    transform: none;
+  }
+
+  .js [data-reveal='title']:not(.is-in) > span {
+    opacity: 0;
+  }
+
+  .js [data-reveal='title'] > span {
+    transition: opacity 0.9s ease;
   }
 }
 

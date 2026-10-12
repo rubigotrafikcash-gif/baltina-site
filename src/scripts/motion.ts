@@ -14,7 +14,7 @@ document.querySelectorAll<HTMLElement>('[data-reveal-group]').forEach((group) =>
 
 const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
 
-if (reduce || !('IntersectionObserver' in window)) {
+if (!('IntersectionObserver' in window)) {
   targets.forEach((el) => el.classList.add('is-in'));
 } else {
   const io = new IntersectionObserver(

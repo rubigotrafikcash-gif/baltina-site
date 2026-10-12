@@ -125,7 +125,7 @@ const turns = [-3, 2, -1.5, 2.5, -2, 1, -2.5, 3, -1];
     will-change: transform;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @media all {
     .board--load .item,
     :global(.js) .board--view.is-in .item {
       animation: land 0.75s cubic-bezier(0.2, 0.75, 0.25, 1) backwards;

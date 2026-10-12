@@ -97,7 +97,7 @@ const items: BoardItem[] = [
     margin-left: 0.25em;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @media all {
     .w > span {
       animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
       animation-delay: calc(var(--i) * 70ms + 100ms);
@@ -128,6 +128,22 @@ const items: BoardItem[] = [
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .w > span {
+      animation-name: fade-in;
+    }
+
+    .intro {
+      animation-name: fade-in;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
     }
   }
 

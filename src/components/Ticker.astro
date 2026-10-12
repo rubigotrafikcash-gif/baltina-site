@@ -65,10 +65,17 @@ const row = [...words, ...words];
     color: var(--pink);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  .track {
+    animation: run 45s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
     .track {
-      animation: run 45s linear infinite;
+      animation-duration: 120s;
     }
+  }
+
+  @media all {
 
     .ticker:hover .track {
       animation-play-state: paused;
